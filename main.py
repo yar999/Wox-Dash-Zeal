@@ -76,11 +76,11 @@ class Main(Wox):
 
         if qsl[0] == '~help':
             jg.append({"Title": "set query alias",
-                       "IcoPath": "Images/Zeal.png", "SubTitle": "z set py3=python3"})
+                       "IcoPath": "Images/Zeal.png", "SubTitle": "z ~set py3=python3"})
             jg.append({"Title": "del query alias",
-                       "IcoPath": "Images/Zeal.png", "SubTitle": "z del py3"})
+                       "IcoPath": "Images/Zeal.png", "SubTitle": "z ~del py3"})
             jg.append({"Title": "list query alias",
-                       "IcoPath": "Images/Zeal.png", "SubTitle": "z list a"})
+                       "IcoPath": "Images/Zeal.png", "SubTitle": "z ~list"})
             return jg
 
         if qsl[0] == '~del' and len(qsl) == 2:
