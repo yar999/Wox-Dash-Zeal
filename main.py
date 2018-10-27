@@ -49,26 +49,23 @@ class Main(Wox):
 
         qsl = re.split(r'\s|=', query)
 
-        if len(qsl) == 1:
-            alias = self.listk()
-            if ':' in qsl[0]:
-                one = qsl[0].split(':')[0]
-                if one in alias:
-                    query = query.replace(one, alias[one], 1)
+        alias = self.listk()
+        key = qsl[0]
 
-            res["SubTitle"] = "Get Zeal docs for {}".format(query)
-            res["JsonRPCAction"] = {"method": "zeal",
-                                    "parameters": [query],
-                                    "dontHideAfterAction": False}
-            jg.append({"Title": "set query alias",
-                       "IcoPath": "Images/Zeal.png", "SubTitle": "z set py3=python3"})
-            jg.append({"Title": "del query alias",
-                       "IcoPath": "Images/Zeal.png", "SubTitle": "z del py3"})
-            jg.append({"Title": "list query alias",
-                       "IcoPath": "Images/Zeal.png", "SubTitle": "z list a"})
-            return jg
+        if len(query) > 0 and key in alias:
+            query = query.replace(key, alias[key], 1)
 
-        if len(qsl) == 2 and qsl[0] == 'list':
+        if ':' in key:
+            one = key.split(':')[0]
+            if one in alias:
+                query = query.replace(one, alias[one], 1)
+
+        res["SubTitle"] = "Get Zeal docs for {}".format(query)
+        res["JsonRPCAction"] = {"method": "zeal",
+                                "parameters": [query],
+                                "dontHideAfterAction": False}
+
+        if qsl[0] == '~list':
             for k, v in self.listk().items():
                 jg.append({
                     'Title': k+' -> '+v,
@@ -77,13 +74,22 @@ class Main(Wox):
 
             return jg
 
-        if len(qsl) == 2 and qsl[0] == 'del':
+        if qsl[0] == '~help':
+            jg.append({"Title": "set query alias",
+                       "IcoPath": "Images/Zeal.png", "SubTitle": "z set py3=python3"})
+            jg.append({"Title": "del query alias",
+                       "IcoPath": "Images/Zeal.png", "SubTitle": "z del py3"})
+            jg.append({"Title": "list query alias",
+                       "IcoPath": "Images/Zeal.png", "SubTitle": "z list a"})
+            return jg
+
+        if qsl[0] == '~del' and len(qsl) == 2:
             res["SubTitle"] = "del query alias {}".format(qsl[1])
             res["JsonRPCAction"] = {"method": "delk",
                                     "parameters": [qsl[1]],
                                     "dontHideAfterAction": False}
 
-        if len(qsl) == 3 and qsl[0] == 'set':
+        if qsl[0] == '~set' and len(qsl) == 3:
             res["SubTitle"] = "set query alias {}={}".format(qsl[1], qsl[2])
             res["JsonRPCAction"] = {"method": "setk",
                                     "parameters": [qsl[1], qsl[2]],
