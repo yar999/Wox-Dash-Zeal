@@ -1,0 +1,12 @@
+{
+  "ID": "a2e992ce699b41deaf883b1443fcfd3f",
+  "ActionKeyword": "z",
+  "Name": "WoxZeal",
+  "Description": "Zeal offline documentation browser",
+  "Author": "yar999",
+  "Version": "0.0.1",
+  "Language": "python",
+  "Website": "http://www.tiagoespinha.net",
+  "IcoPath": "Images\\Zeal.png",
+  "ExecuteFileName": "main.py"
+}
