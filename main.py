@@ -66,15 +66,19 @@ class Main(Wox):
             sres = search(query)
             for sr in sres:
                 pl = sr['pl']
-                if pl in ['Python_2', 'Python_3']:
-                    pl = pl.replace('_', '')
+                pln = pl
+                if pl in ('Python_2', 'Python_3'):
+                    pln = pl.replace('_', '')
+
+                if pl.startswith('Bootstrap'):
+                    pln = 'Bootstrap'
 
                 jg.append({
                     'Title': sr['res'],
                     'SubTitle': pl,
                     'IcoPath': sr['img'],
                     'JsonRPCAction': {"method": "zeal",
-                                      "parameters": [pl+':'+sr['res']],
+                                      "parameters": [pln+':'+sr['res']],
                                       "dontHideAfterAction": False}
                 })
 
