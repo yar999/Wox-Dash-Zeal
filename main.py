@@ -3,9 +3,11 @@
 
 
 import os
+import re
+
 from wox import Wox, WoxAPI
 from json import load, dump
-import re
+from docs import search
 
 
 class Main(Wox):
@@ -52,20 +54,33 @@ class Main(Wox):
         alias = self.listk()
         key = qsl[0]
 
-        if len(query) > 0 and key in alias:
-            query = query.replace(key, alias[key], 1)
+        if len(qsl) > 0 and qsl[0] not in ('~list', '~set', '~del', '~help'):
+            if key in alias:
+                query = query.replace(key, alias[key], 1)
 
-        if ':' in key:
-            one = key.split(':')[0]
-            if one in alias:
-                query = query.replace(one, alias[one], 1)
+            if ':' in key:
+                one = key.split(':')[0]
+                if one in alias:
+                    query = query.replace(one, alias[one], 1)
 
-        res["SubTitle"] = "Get Zeal docs for {}".format(query)
-        res["JsonRPCAction"] = {"method": "zeal",
-                                "parameters": [query],
-                                "dontHideAfterAction": False}
+            sres = search(query)
+            for sr in sres:
+                pl = sr['pl']
+                if pl in ['Python_2', 'Python_3']:
+                    pl = pl.replace('_', '')
 
-        if qsl[0] == '~list':
+                jg.append({
+                    'Title': sr['res'],
+                    'SubTitle': pl,
+                    'IcoPath': sr['img'],
+                    'JsonRPCAction': {"method": "zeal",
+                                      "parameters": [pl+':'+sr['res']],
+                                      "dontHideAfterAction": False}
+                })
+
+            return jg
+
+        if key == '~list':
             for k, v in self.listk().items():
                 jg.append({
                     'Title': k+' -> '+v,
@@ -74,7 +89,7 @@ class Main(Wox):
 
             return jg
 
-        if qsl[0] == '~help':
+        if key == '~help':
             jg.append({"Title": "set query alias",
                        "IcoPath": "Images/Zeal.png", "SubTitle": "z ~set py3=python3"})
             jg.append({"Title": "del query alias",
@@ -83,20 +98,21 @@ class Main(Wox):
                        "IcoPath": "Images/Zeal.png", "SubTitle": "z ~list"})
             return jg
 
-        if qsl[0] == '~del' and len(qsl) == 2:
+        if key == '~del' and len(qsl) == 2:
             res["SubTitle"] = "del query alias {}".format(qsl[1])
             res["JsonRPCAction"] = {"method": "delk",
                                     "parameters": [qsl[1]],
                                     "dontHideAfterAction": False}
+            jg.append(res)
+            return jg
 
-        if qsl[0] == '~set' and len(qsl) == 3:
+        if key == '~set' and len(qsl) == 3:
             res["SubTitle"] = "set query alias {}={}".format(qsl[1], qsl[2])
             res["JsonRPCAction"] = {"method": "setk",
                                     "parameters": [qsl[1], qsl[2]],
                                     "dontHideAfterAction": False}
-
-        jg.append(res)
-        return jg
+            jg.append(res)
+            return jg
 
 
 if __name__ == "__main__":
