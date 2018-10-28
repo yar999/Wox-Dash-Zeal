@@ -1,24 +1,36 @@
 # WoxZeal
 
+## config
+
+### docspath
+
+The path to zeal's dossets path:
+
+```json
+{
+    "path": "D:\\Program Files\\Zeal\\dossets"
+}
+```
+
 ## help
 
 ```
 z ~help
 ```
 
-## set query alias
+### set query alias
 
 ```
 z ~set py3=python3
 ```
 
-## del query alias
+### del query alias
 
 ```
 z ~del py3
 ```
 
-## list query alias
+### list query alias
 
 ```
 z ~list
