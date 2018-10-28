@@ -54,7 +54,7 @@ class Main(Wox):
         alias = self.listk()
         key = qsl[0]
 
-        if len(qsl) > 0 and qsl[0] not in ('~list', '~set', '~del', '~help'):
+        if len(qsl) > 0 and key not in ('~list', '~set', '~del', '~help'):
             if key in alias:
                 query = query.replace(key, alias[key], 1)
 

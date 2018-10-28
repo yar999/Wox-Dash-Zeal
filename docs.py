@@ -22,7 +22,7 @@ def searchdocs(d, query):
     with connect(d) as conn:
         conn.text_factory = str
         cur = conn.cursor()
-        sql = "select name from searchIndex where name like ? order by length(name) limit 30"
+        sql = "select name from searchIndex where name like ? order by name limit 30"
         c = cur.execute(sql, ('%'+query+'%',))
         res = c.fetchall()
         if len(res) > 0:
@@ -42,16 +42,15 @@ def search(query):
 
     for d in dbs:
         if ":" in query:
-            one = query.split(':')[0]
-            if "_" in one:
-                m = re.match(r'(\w+)(\d+)', one)
-                if m:
-                    one = "{}_{}".format(m.group(1), m.group(2))
+            one = query.split(':', 1)[0]
+            m = re.match(r'(\w+)(\d+)', one)
+            if m:
+                one = "{}_{}".format(m.group(1), m.group(2))
 
             if one.lower() not in d.lower():
                 continue
 
-            query = query.split(':')[1]
+            query = query.split(':', 1)[1]
             searchdocs(d, query)
             break
         else:
@@ -62,4 +61,5 @@ def search(query):
 
 if __name__ == '__main__':
     from sys import argv
-    print(search(argv[1]))
+    from pprint import pprint
+    pprint(search(argv[1]))
