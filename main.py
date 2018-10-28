@@ -49,15 +49,16 @@ class Main(Wox):
         res = {"Title": "Zeal",
                "IcoPath": "Images/Zeal.png"}
 
-        qsl = re.split(r'\s|=', query)
-
         alias = self.listk()
+
+        qsl = re.split(r'\s|=', query)
         key = qsl[0]
 
         if len(qsl) > 0 and key not in ('~list', '~set', '~del', '~help'):
             if key in alias:
                 query = query.replace(key, alias[key], 1)
 
+            # repalce alias in key when ':' in key
             if ':' in key:
                 one = key.split(':')[0]
                 if one in alias:
@@ -67,9 +68,12 @@ class Main(Wox):
             for sr in sres:
                 pl = sr['pl']
                 pln = pl
+
+                # remove '_' for zeal query
                 if pl in ('Python_2', 'Python_3'):
                     pln = pl.replace('_', '')
 
+                # replace 'Bootstrap_4' or 'Bootstrap_3' to 'Bootstrap' for zeal query
                 if pl.startswith('Bootstrap'):
                     pln = 'Bootstrap'
 

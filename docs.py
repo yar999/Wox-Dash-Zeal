@@ -8,6 +8,7 @@ from json import load
 
 dbpath = os.path.abspath(os.path.join(
     os.path.dirname(__file__), 'docspath.json'))
+
 with open(dbpath) as f:
     dbpath = load(f)
 
@@ -41,8 +42,12 @@ def searchdocs(d, query):
 def search(query):
 
     for d in dbs:
+        # only query specified db
+        # eg: rust:alloc , only query rust db
         if ":" in query:
             one = query.split(':', 1)[0]
+
+            # pythonx db is python_x
             m = re.match(r'(\w+)(\d+)', one)
             if m:
                 one = "{}_{}".format(m.group(1), m.group(2))
