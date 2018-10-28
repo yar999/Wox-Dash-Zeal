@@ -42,12 +42,13 @@ def search(query):
 
     for d in dbs:
         if ":" in query:
-            one = query.split(':')[0].capitalize()
-            m = re.match(r'(\w+)(\d+)', one)
-            if m:
-                one = "{}_{}".format(m.group(1), m.group(2))
+            one = query.split(':')[0]
+            if "_" in one:
+                m = re.match(r'(\w+)(\d+)', one)
+                if m:
+                    one = "{}_{}".format(m.group(1), m.group(2))
 
-            if one not in d:
+            if one.lower() not in d.lower():
                 continue
 
             query = query.split(':')[1]
