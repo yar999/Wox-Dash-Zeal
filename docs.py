@@ -23,7 +23,7 @@ def searchdocs(d, query):
     with connect(d) as conn:
         conn.text_factory = str
         cur = conn.cursor()
-        sql = "select name from searchIndex where name like ? order by name limit 30"
+        sql = "select name as score from searchIndex where name like ? order by length(name) limit 30"
         c = cur.execute(sql, ('%'+query+'%',))
         res = c.fetchall()
         if len(res) > 0:
