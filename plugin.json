@@ -1,12 +1,12 @@
 {
   "ID": "a2e992ce699b41deaf883b1443fcfd3f",
   "ActionKeyword": "z",
-  "Name": "WoxZeal",
+  "Name": "Wox-Dash-Zeal",
   "Description": "Zeal offline documentation browser",
   "Author": "yar999",
   "Version": "0.0.2",
   "Language": "python",
-  "Website": "https://github.com/yar999/WoxZeal",
+  "Website": "https://github.com/yar999/Wox-Dash-Zeal",
   "IcoPath": "Images\\Zeal.png",
   "ExecuteFileName": "main.py"
 }
