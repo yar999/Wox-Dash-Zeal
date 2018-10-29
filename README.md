@@ -1,4 +1,4 @@
-# WoxZeal
+# Wox-Dash-Zeal
 
 need to install python, zeal (https://zealdocs.org/) and some docsets for zeal.
 
@@ -14,7 +14,7 @@ The path to zeal's dossets path:
 }
 ```
 
-## help
+## alias help
 
 ```
 z ~help
@@ -36,4 +36,24 @@ z ~del py3
 
 ```
 z ~list
+```
+
+## use
+
+```
+z py3:sys.v
+```
+
+```
+z py2,py3:sys.v
+```
+
+```
+z rust,c:print
+```
+
+```
+z rust:alloc:
+z rust:alloc::
+z rust:alloc::fmt
 ```

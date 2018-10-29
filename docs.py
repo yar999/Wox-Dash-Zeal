@@ -19,16 +19,16 @@ dbs = (os.path.join(dbpath, d, 'Contents', 'Resources', 'docSet.dsidx')
 jg = []
 
 
-def searchdocs(d, query):
-    with connect(d) as conn:
+def searchdocs(db, query):
+    with connect(db) as conn:
         conn.text_factory = str
         cur = conn.cursor()
         sql = "select name as score from searchIndex where name like ? order by length(name) limit 30"
         c = cur.execute(sql, ('%'+query+'%',))
         res = c.fetchall()
         if len(res) > 0:
-            pl = d.split(os.path.sep)[4].split('.')[0]
-            img = os.path.join(dbpath, d.split(
+            pl = db.split(os.path.sep)[4].split('.')[0]
+            img = os.path.join(dbpath, db.split(
                 os.path.sep)[4], 'icon@2x.png')
             for r in res:
                 for s in r:
@@ -41,25 +41,19 @@ def searchdocs(d, query):
 
 def search(query):
 
-    for d in dbs:
+    for db in dbs:
         # only query specified db
-        # eg: rust:alloc , only query rust db
+        # eg:
+        # rust:alloc , only query rust db
+        # rust,python: sys, query rust and python db
         if ":" in query:
-            one = query.split(':', 1)[0]
-
-            # pythonx db is python_x
-            m = re.match(r'(\w+)(\d+)', one)
-            if m:
-                one = "{}_{}".format(m.group(1), m.group(2))
-
-            if one.lower() not in d.lower():
-                continue
-
-            query = query.split(':', 1)[1]
-            searchdocs(d, query)
-            break
+            head, tail = query.split(':', 1)
+            head = re.sub(r'(\w+)(\d+)', r'\1_\2', head)
+            for k in head.split(','):
+                if (k+'.docset').lower() in db.lower():
+                    searchdocs(db, tail)
         else:
-            searchdocs(d, query)
+            searchdocs(db, query)
 
     return jg
 

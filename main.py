@@ -55,34 +55,28 @@ class Main(Wox):
         key = qsl[0]
 
         if len(qsl) > 0 and key not in ('~list', '~set', '~del', '~help'):
-            if key in alias:
-                query = query.replace(key, alias[key], 1)
 
             # repalce alias in key when ':' in key
             if ':' in key:
-                one = key.split(':')[0]
-                if one in alias:
-                    query = query.replace(one, alias[one], 1)
+                head, tail = key.split(':', 1)
+                headl = head.split(',')
+                for n in range(len(headl)):
+                    if headl[n] in alias:
+                        headl[n] = alias[headl[n]]
+
+                query = ','.join(headl) + ':' + tail
 
             sres = search(query)
             for sr in sres:
                 pl = sr['pl']
-                pln = pl
-
-                # remove '_' for zeal query
-                if pl in ('Python_2', 'Python_3'):
-                    pln = pl.replace('_', '')
-
-                # replace 'Bootstrap_4' or 'Bootstrap_3' to 'Bootstrap' for zeal query
-                if pl.startswith('Bootstrap'):
-                    pln = 'Bootstrap'
+                pl = re.sub(r'(\w+)_(\d+)', r'\1\2', pl)
 
                 jg.append({
                     'Title': sr['res'],
                     'SubTitle': pl,
                     'IcoPath': sr['img'],
                     'JsonRPCAction': {"method": "zeal",
-                                      "parameters": [pln+':'+sr['res']],
+                                      "parameters": [pl+':'+sr['res']],
                                       "dontHideAfterAction": False}
                 })
 
