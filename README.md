@@ -1,5 +1,7 @@
 # WoxZeal
 
+need to install python, zeal (https://zealdocs.org/) and some docsets for zeal.
+
 ## config
 
 ### docspath
