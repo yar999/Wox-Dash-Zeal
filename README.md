@@ -40,6 +40,12 @@ z ~list
 
 ## use
 
+Colon and the following query string can be blank.
+
+```
+z py3: sys.v
+```
+
 ```
 z py3:sys.v
 ```

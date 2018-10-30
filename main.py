@@ -58,25 +58,29 @@ class Main(Wox):
 
             # repalce alias in key when ':' in key
             if ':' in key:
-                head, tail = key.split(':', 1)
+                head, tail = query.split(':', 1)
                 headl = head.split(',')
                 for n in range(len(headl)):
                     if headl[n] in alias:
                         headl[n] = alias[headl[n]]
 
-                query = ','.join(headl) + ':' + tail
+                query = ','.join(headl) + ':' + tail.lstrip()
 
             sres = search(query)
             for sr in sres:
                 pl = sr['pl']
-                pl = re.sub(r'(\w+)_(\d+)', r'\1\2', pl)
+                plq = pl
+                if pl.lower() in ('bootstrap_4',):
+                    plq = re.sub(r'(\w+)_(\d+)', r'\1', pl)
+                else:
+                    plq = re.sub(r'(\w+)_(\d+)', r'\1\2', pl)
 
                 jg.append({
                     'Title': sr['res'],
                     'SubTitle': pl,
                     'IcoPath': sr['img'],
                     'JsonRPCAction': {"method": "zeal",
-                                      "parameters": [pl+':'+sr['res']],
+                                      "parameters": [plq+':'+sr['res']],
                                       "dontHideAfterAction": False}
                 })
 
