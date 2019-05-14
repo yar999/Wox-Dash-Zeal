@@ -5,6 +5,7 @@ import os
 import re
 from sqlite3 import connect
 from json import load
+import xml.etree.ElementTree as et
 
 dbpath = os.path.abspath(os.path.join(
     os.path.dirname(__file__), 'docspath.json'))
@@ -20,6 +21,19 @@ jg = []
 
 
 def searchdocs(db, query):
+    docroot = db.split(os.path.sep)[:-3]
+    docroot[0] += os.path.sep
+    pl = docroot[-1].split('.')[0]
+    img = os.path.join(*docroot, 'icon@2x.png')
+
+    # get bundle identifier
+    infoplist = os.path.join(*docroot,'Contents','Info.plist')
+    d = et.parse(infoplist).getroot().find('dict')
+    dcsid = pl
+    for i,e in enumerate(d):
+        if e.tag == 'key' and e.text == 'CFBundleIdentifier':
+            if d[i+1].tag == 'string':
+                dcsid = d[i+1].text
     with connect(db) as conn:
         conn.text_factory = str
         cur = conn.cursor()
@@ -27,15 +41,13 @@ def searchdocs(db, query):
         c = cur.execute(sql, ('%'+query+'%',))
         res = c.fetchall()
         if len(res) > 0:
-            pl = db.split(os.path.sep)[4].split('.')[0]
-            img = os.path.join(dbpath, db.split(
-                os.path.sep)[4], 'icon@2x.png')
             for r in res:
                 for s in r:
                     jg.append({
                         "pl": pl,
                         "img": img,
-                        'res': s
+                        'res': s,
+                        'dcsid': dcsid
                     })
 
 
