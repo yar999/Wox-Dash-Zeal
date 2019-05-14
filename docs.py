@@ -58,12 +58,15 @@ def search(query):
         # eg:
         # rust:alloc , only query rust db
         # rust,python: sys, query rust and python db
-        if ":" in query:
+        if ':' in query:
             head, tail = query.split(':', 1)
-            head = re.sub(r'(\w+)(\d+)', r'\1_\2', head)
-            for k in head.split(','):
-                if (k+'.docset').lower() in db.lower():
-                    searchdocs(db, tail)
+            if not tail.startswith(':'):
+                head = re.sub(r'(\w+)(\d+)', r'\1_\2', head)
+                for k in head.split(','):
+                    if (k+'.docset').lower() in db.lower():
+                        searchdocs(db, tail)
+            else:
+                searchdocs(db, query)
         else:
             searchdocs(db, query)
 
